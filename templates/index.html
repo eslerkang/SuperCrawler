@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Never Webtoon</title>
+    </head>
+    <body>
+        <h1>
+            Never Webtoon Version a.0.0.1
+        </h1>
+        <h2>
+            Last update : {{date_today}}
+        </h2>
+        <button onclick='location.href="/update"'>
+            Update
+        </button>
+        <button onclick='location.href="{{mode}}"'>
+            {{mode_name}}
+        </button>
+        <br>
+        {% for webtoon in webtoon_list %}
+            <a href='/detail?id={{webtoon.get("id")}}'>
+                <img src='{{webtoon.get("thumb")}}' title="{{webtoon.get('title')}}" alt="{{webtoon.get('title')}}">
+            </a>
+        {% endfor %}
+    </body>
+</html>
