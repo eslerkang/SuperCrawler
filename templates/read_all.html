@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Never Webtoon</title>
+        <style>
+            div {
+                display : flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
+    </head>
+    <body>
+        {%for img in img_list%}
+            <div>
+                <img src={{img}}>
+            </div>
+        {%endfor%}
+    </body>
+</html>

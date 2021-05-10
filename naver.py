@@ -104,14 +104,45 @@ def get_finish_id_list():
 
 def get_epis(idx, last_epi):
     epi_list = []
-    for epi in range(1, int(last_epi) + 1):
-        result = requests.get(f'https://comic.naver.com/webtoon/list.nhn?titleId={idx}&page=99999')
+    result = requests.get(
+        f'https://comic.naver.com/webtoon/list.nhn?titleId={idx}&page=999999'
+    )
+    soup = BeautifulSoup(result.text, 'html.parser')
+    last_page = int(
+        soup.find(
+            'div',
+            {'class': 'paginate'}
+        ).find(
+            'strong',
+            {'class': 'page'}
+        ).find('em').string
+    )
+    for page in range(1, last_page+1):
+        result = requests.get(
+            f'https://comic.naver.com/webtoon/list.nhn?titleId={idx}&page={page}'
+        )
         soup = BeautifulSoup(result.text, 'html.parser')
-        pagination = soup.find('div', {'class': 'pagination'})
-        last_page = pagination.find('strong', {'class': 'page'}).find('em').string
-        last_page = int(last_page)
-        for page in range(1, last_page+1):
-            result = requests.get(f'https://comic.naver.com/webtoon/list.nhn?titleId={idx}&page={page}')
-            soup = BeautifulSoup(result.text, 'html.parser')
-            
-    return []
+        trs = soup.find('table', {'class': 'viewList'}).find_all('tr')[1:]
+        for tr in trs:
+            if not tr.get('class'):
+                title = tr.find('td', {'class': 'title'}).find('a').string
+                thumb = tr.find_all('img')[0]['src']
+                url = 'https://comic.naver.com' + tr.find_all('a')[0]['href']
+                epi_list.append({
+                    'title': title,
+                    'thumb': thumb,
+                    'url': url
+                })
+    epi_list.reverse()
+    return epi_list
+
+
+def get_all_img(idx, last_epi):
+    img_list = []
+    for epi in range(1, int(last_epi)+1):
+        result = requests.get(f'https://comic.naver.com/webtoon/detail.nhn?titleId={idx}&no={epi}')
+        soup = BeautifulSoup(result.text, 'html.parser')
+        imgs = soup.find('div', {'class': 'wt_viewer'}).find_all('img')
+        for img in imgs:
+            img_list.append(img.get('src'))
+    return img_list

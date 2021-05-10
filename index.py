@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from naver import get_webtoon_list, get_id_list, get_last_epi, get_finish_list, get_finish_id_list, get_epis
+from naver import get_webtoon_list, get_id_list, get_last_epi, get_finish_list, get_finish_id_list, get_epis, get_all_img
 from datetime import date
 
 app = Flask('Never Webtoon')
@@ -50,9 +50,8 @@ def webtoon():
             raise Exception()
 
         last_epi = get_last_epi(content)
-
         epi_list = get_epis(idx, last_epi)
-        
+
         return render_template(
             'detail.html',
             content=content,
@@ -100,6 +99,34 @@ def finish():
         mode_name='연재작품',
         mode='/'
     )
+
+
+@app.route('/read_all')
+def read_all():
+    try:
+        id_list = id_db.get('webtoon')
+        finish_id_list = id_db.get('finish')
+        idx = request.args.get('id')
+        if(not idx):
+            raise Exception()
+        if idx in id_list:
+            webtoon_num = id_list.index(idx)
+            content = webtoon_db['webtoon'][webtoon_num]
+        elif idx in finish_id_list:
+            webtoon_num = finish_id_list.index(idx)
+            content = webtoon_db['finish'][webtoon_num]
+        else:
+            raise Exception()
+
+        last_epi = get_last_epi(content)
+        img_list = get_all_img(idx, last_epi)
+
+        return render_template(
+            'read_all.html',
+            img_list=img_list
+        )
+    except:
+        return redirect('/')
 
 
 app.run(host='0.0.0.0', port='80')

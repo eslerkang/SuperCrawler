@@ -2,16 +2,26 @@
 <html>
     <head>
         <title>Never Webtoon</title>
+        <style>
+            div {
+                display : flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
     </head>
     <body>
         <h1>
-            {{content['title']}}
+            {{content.get('title')}}
         </h1>
         <h2>
-            총 회차 : {{last_epi}}
+            총 회차 : {{last_epi}}(<a href='/read_all?id={{content.get("id")}}'>정주행</a>)
         </h2>
-        <p>
-            {{epi_list}}
-        </p>
+        {%for epi in epi_list%}
+            <div>
+                <img src={{epi.get('thumb')}} title={{epi.get('title')}}>
+                <a href={{epi.get('url')}} target="_blank">{{epi.get('title')}}</a>
+            </div>
+        {%endfor%}
     </body>
 </html>
