@@ -140,6 +140,7 @@ def get_epis(idx, last_epi):
 def get_all_img(idx, last_epi):
     img_list = []
     for epi in range(1, int(last_epi)+1):
+        print(f'Crawling epi:{epi}/{last_epi}')
         result = requests.get(f'https://comic.naver.com/webtoon/detail.nhn?titleId={idx}&no={epi}')
         soup = BeautifulSoup(result.text, 'html.parser')
         imgs = soup.find('div', {'class': 'wt_viewer'}).find_all('img')

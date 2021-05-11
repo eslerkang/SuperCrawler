@@ -21,7 +21,7 @@ def index():
         webtoon_db['webtoon'] = webtoon_list
         date_today = date.today().isoformat()
         date_db['webtoon'] = date_today
-        id_list = get_id_list()
+        id_list =get_id_list()
         id_db['webtoon'] = id_list
     return render_template(
         'index.html',
@@ -48,10 +48,8 @@ def webtoon():
             content = webtoon_db['finish'][webtoon_num]
         else:
             raise Exception()
-
-        last_epi = get_last_epi(content)
+        last_epi =get_last_epi(content)
         epi_list = get_epis(idx, last_epi)
-
         return render_template(
             'detail.html',
             content=content,
@@ -66,12 +64,12 @@ def webtoon():
 def update():
     webtoon_list = get_webtoon_list()
     webtoon_db['webtoon'] = webtoon_list
-    webtoon_list = get_finish_list()
+    webtoon_list =get_finish_list()
     webtoon_db['finish'] = webtoon_list
     date_today = date.today().isoformat()
     date_db['webtoon'] = date_today
     date_db['finish'] = date_today
-    id_list = get_id_list()
+    id_list =get_id_list()
     id_db['webtoon'] = id_list
     id_list = get_finish_id_list()
     id_db['finish'] = id_list
@@ -117,10 +115,8 @@ def read_all():
             content = webtoon_db['finish'][webtoon_num]
         else:
             raise Exception()
-
         last_epi = get_last_epi(content)
         img_list = get_all_img(idx, last_epi)
-
         return render_template(
             'read_all.html',
             img_list=img_list
