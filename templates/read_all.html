@@ -3,18 +3,48 @@
     <head>
         <title>Never Webtoon</title>
         <style>
-            div {
+            .img{
                 display : flex;
                 align-items: center;
                 justify-content: center;
             }
+            .progress {
+                margin-bottom: 15px;
+                position: fixed;
+                top: 0;
+                left:0;
+                height: 20px;
+                background: blue;
+                width: 0%;
+                text-align: right;
+                color: white;
+            }
         </style>
     </head>
     <body>
+        <div class="progress" id='progress'></div>
         {%for img in img_list%}
-            <div>
+            <div class='img'>
                 <img src={{img}}>
             </div>
         {%endfor%}
     </body>
+    <script>
+        window.addEventListener('scroll', () => {
+            let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+            let windowHeight = window.innerHeight; // 스크린 창
+            let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+            if(scrollLocation + windowHeight >= fullHeight){
+                console.log('끝')
+            }
+            let percent = ((scrollLocation+windowHeight) / fullHeight * 100)
+            let progress = document.getElementById('progress')
+            progress.innerHTML = String(Math.floor(percent))+'%';
+            progress.setAttribute('style', 'width: '+String(percent)+'%; background: blue;');
+            if(percent >= 100) {
+                progress.setAttribute('style', 'width: '+String(percent)+'%; background: red;');
+                progress.innerHTML = '정주행 완료!';
+            }
+        })
+    </script>
 </html>
